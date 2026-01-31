@@ -1,0 +1,26 @@
+services:
+  server:
+    build: ./server
+    ports:
+      - "3001:3001"
+    volumes:
+      - humor-data:/app/data
+    environment:
+      - PORT=3001
+      - AUTH_TOKEN=${AUTH_TOKEN}
+      - CT0=${CT0}
+    restart: always
+
+  client:
+    build:
+      context: ./client
+      args:
+        - VITE_API_BASE_URL=http://localhost:3001
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    restart: always
+
+volumes:
+  humor-data:
